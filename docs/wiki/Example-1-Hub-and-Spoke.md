@@ -3,7 +3,7 @@
 
 ### Bicep Module Registry
 
-Here is a simple example Bicep file for deploying a landing zone (Subscription) with a spoke Virtual Network peered to a Hub Virtual Network using the [Bicep Module Registry](https://github.com/Azure/bicep-registry-modules):
+Here is a simple example Bicep file for deploying a landing zone (Subscription) with a spoke Virtual Network peered to a Hub Virtual Network using the [Bicep Module Registry](https://aka.ms/lz-vending/bicep):
 
 ```bicep
 targetScope = 'managementGroup'
@@ -11,7 +11,7 @@ targetScope = 'managementGroup'
 @description('Specifies the location for resources.')
 param location string = 'uksouth'
 
-module sub003 'br/public:lz/sub-vending:1.4.1' = {
+module sub003 'br/public:avm/ptn/lz/sub-vending:0.1.0' = {
   name: 'sub-bicep-lz-vending-example-001'
   params: {
     subscriptionAliasEnabled: true
@@ -160,8 +160,8 @@ Here is a simple example parameter file for deploying a landing zone (Subscripti
         }
       ]
     },
-    "disableTelemetry": {
-      "value": false
+    "enableTelemetry": {
+      "value": true
     }
   }
 }

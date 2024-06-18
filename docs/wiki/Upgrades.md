@@ -11,4 +11,4 @@ Given a version number `MAJOR.MINOR.PATCH`, we increment the:
 
 If you are upgrading to a new `MINOR` or `PATCH` release, you will not see any breaking changes.
 
-For a new `MAJOR` release, you will see breaking changes. We will publish guidance in the [release notes](https://github.com/Azure/bicep-lz-vending/releases) on GitHub.
+For a new `MAJOR` release, you will see breaking changes. We will publish guidance in the [Bicep public registry](https://aka.ms/lz-vending/bicep) on GitHub.

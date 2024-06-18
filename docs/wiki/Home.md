@@ -1,7 +1,7 @@
 <!-- markdownlint-disable MD041 -->
 Welcome to the Bicep Landing Zone (aka Subscription) vending module documentation.
 
-Please see the [README][readme] for information on module requirements, variables and outputs. This wiki contains longer form documentation.
+Please see the [README](https://aka.ms/lz-vending/bicep) for information on module requirements, variables and outputs. This wiki contains longer form documentation.
 
 This module can be used standalone, or combined with the [Azure Landing Zones Bicep modules][alz_bicep_module] to create a landing zone within the [Azure Landing Zones conceptual architecture][alz_conceptual_arch].
 
@@ -17,4 +17,3 @@ Before deployment, please review the [required permissions](https://github.com/a
 
 [alz_conceptual_arch]: https://aka.ms/alz#azure-landing-zone-conceptual-architecture
 [alz_bicep_module]: https://aka.ms/alz/bicep
-[readme]: https://github.com/Azure/bicep-lz-vending#readme

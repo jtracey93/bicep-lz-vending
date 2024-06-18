@@ -1,9 +1,17 @@
 <!-- markdownlint-disable MD041 -->
-## Example 3 - Landing Zone (Subscription) using an existing Subscription
+## Example 5 - Landing Zone (Subscription) with a spoke Virtual Network peered to a Hub Virtual Network and resource providers and features registration
 
 ### Bicep Module Registry
 
-Here is a simple example Bicep file for deploying a landing zone (Subscription) with a spoke Virtual Network peered to a Virtual WAN Hub using the [Bicep Module Registry](https://aka.ms/lz-vending/bicep):
+Here is a simple example Bicep file for deploying a landing zone (Subscription) with a spoke Virtual Network peered to a Hub Virtual Network, resource providers and features registration using the [Bicep Module Registry](https://aka.ms/lz-vending/bicep):
+
+> A resoure group gets created in the subscription with the format "rsg-<location>-ds-<xxxx>" hosting a deployment script and a user-assigned managed identity. This resource group needs to be manually deleted if not needed after the resource providers features registration process.
+>
+> The resource providers registration process is asynchronous as it might take extended periods of time to register.
+> After a preview feature is registered in your subscription, you'll see one of two states: Registered or Pending.
+>
+>- For a preview feature that doesn't require approval, the state is Registered.
+>- If a preview feature requires approval, the registration state is Pending. You must request approval from the Azure service offering the preview feature. Usually, you request access through a support ticket.
 
 ```bicep
 targetScope = 'managementGroup'
@@ -12,10 +20,12 @@ targetScope = 'managementGroup'
 param location string = 'uksouth'
 
 module sub003 'br/public:avm/ptn/lz/sub-vending:0.1.0' = {
-  name: 'sub003'
+  name: 'sub-bicep-lz-vending-example-001'
   params: {
-    subscriptionAliasEnabled: false
-    existingSubscriptionId: 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'
+    subscriptionAliasEnabled: true
+    subscriptionBillingScope: '/providers/Microsoft.Billing/billingAccounts/1234567/enrollmentAccounts/123456'
+    subscriptionAliasName: 'sub-bicep-lz-vending-example-001'
+    subscriptionDisplayName: 'sub-bicep-lz-vending-example-001'
     subscriptionTags: {
       test: 'true'
     }
@@ -31,16 +41,18 @@ module sub003 'br/public:avm/ptn/lz/sub-vending:0.1.0' = {
     ]
     virtualNetworkResourceGroupLockEnabled: false
     virtualNetworkPeeringEnabled: true
-    hubNetworkResourceId: '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/rsg-uks-net-vwan-001/providers/Microsoft.Network/virtualHubs/vhub-uks-001'
+    hubNetworkResourceId: '/subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/rsg-uks-net-hub-001/providers/Microsoft.Network/virtualNetworks/vnet-uks-hub-001'
+    resourceProviders : {
+      'Microsoft.Compute' : ['InGuestHotPatchVMPreview']
+      'Microsoft.AVS'     : ['AzureServicesVm','ArcAutomatedOnboarding']
+    }
   }
 }
 ```
 
 ### ARM JSON Parameter File
 
-Here is a simple example parameter file for deploying a landing zone (Subscription) with a spoke Virtual Network connected to a Virtual WAN Hub:
-
-> Note the Virtual WAN routing configuration here will use the defaults. Meaning the Virtual Hub Connection will be associated to the default route table and the default label. For advanced routing configuration, see the examples in the [`main.bicep` module parameters documentation](../../main.bicep.parameters.md)
+Here is a simple example parameter file for deploying a landing zone (Subscription) with a spoke Virtual Network peered to a Hub Virtual Network, resource providers and features registration:
 
 ```json
 {
@@ -48,22 +60,22 @@ Here is a simple example parameter file for deploying a landing zone (Subscripti
   "contentVersion": "1.0.0.0",
   "parameters": {
     "subscriptionAliasEnabled": {
-      "value": false
+      "value": true
     },
     "subscriptionDisplayName": {
-      "value": ""
+      "value": "sub-bicep-lz-vending-example-001"
     },
     "subscriptionAliasName": {
-      "value": ""
+      "value": "sub-bicep-lz-vending-example-001"
     },
     "subscriptionBillingScope": {
-      "value": ""
+      "value": "providers/Microsoft.Billing/billingAccounts/1234567/enrollmentAccounts/123456"
     },
     "subscriptionWorkload": {
-      "value": ""
+      "value": "Production"
     },
     "existingSubscriptionId": {
-      "value": "xxxxxxxx-yyyy-zzzz-yyyy-xxxxxxxxxxxx"
+      "value": ""
     },
     "subscriptionManagementGroupAssociationEnabled": {
       "value": true
@@ -159,6 +171,12 @@ Here is a simple example parameter file for deploying a landing zone (Subscripti
           "relativeScope": "/resourceGroups/rg-networking-001"
         }
       ]
+    },
+    "resourceProviders":{
+      "value":{
+        "Microsoft.Compute": ["InGuestHotPatchVMPreview"],
+        "Microsoft.AVS" : ["AzureServicesVm","ArcAutomatedOnboarding"]
+      }
     },
     "enableTelemetry": {
       "value": true

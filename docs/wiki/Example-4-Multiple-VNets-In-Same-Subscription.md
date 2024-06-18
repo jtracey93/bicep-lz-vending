@@ -3,7 +3,7 @@
 
 ### Bicep Module Registry
 
-Here is a simple example Bicep file for deploying a landing zone (Subscription) with multiple spoke Virtual Networks peered to a Virtual WAN Hub using the [Bicep Module Registry](https://github.com/Azure/bicep-registry-modules):
+Here is a simple example Bicep file for deploying a landing zone (Subscription) with multiple spoke Virtual Networks peered to a Virtual WAN Hub using the [Bicep Module Registry](https://aka.ms/lz-vending/bicep):
 
 ```bicep
 targetScope = 'managementGroup'
@@ -11,7 +11,7 @@ targetScope = 'managementGroup'
 @description('Specifies the location for resources.')
 param location string = 'uksouth'
 
-module createSubAndFirstVnet 'br/public:lz/sub-vending:1.4.1' = {
+module createSubAndFirstVnet 'br/public:avm/ptn/lz/sub-vending:0.1.0' = {
   name: 'sub-with-multiple-vnets'
   params: {
     subscriptionAliasEnabled: true
@@ -37,7 +37,7 @@ module createSubAndFirstVnet 'br/public:lz/sub-vending:1.4.1' = {
   }
 }
 
-module createSubAndSecondVnet 'br/public:lz/sub-vending:1.4.1' = {
+module createSubAndSecondVnet 'br/public:avm/ptn/lz/sub-vending:0.1.0' = {
   name: 'additional-vnet'
   params: {
     subscriptionAliasEnabled: false
